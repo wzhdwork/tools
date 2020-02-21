@@ -4,14 +4,20 @@
  */
 package cn.ibingli.common.util;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.Vector;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * @Description:Date工具类
@@ -1138,57 +1144,6 @@ public class DateUtil {
 	    return DateTimes;
 	}
     
-    /**
-     * 获取本周周次和日期时间段信息
-     * 
-     * @return
-     */
-    public static WeekInfoModel getTheDayInfo(Date date) {
-        WeekInfoModel model = new WeekInfoModel();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    	
-    	// 根据今天的时间获取本周属于本月的第几周
-        Calendar now = Calendar.getInstance();
-        now.setTime(date);
-        // setFirstDayOfWeek的方法意思只对WEEK_OF_MONTH 与WEEK_OF_YEAR 有作用
-        now.setFirstDayOfWeek(Calendar.MONDAY);
-        
-        int wom = now.get(Calendar.WEEK_OF_MONTH);
-        model.setWeekOfMonth(wom);
-
-        int dayOfWeek = now.get(Calendar.DAY_OF_WEEK);
-        // 中国的特征：周一才是第一天
-        model.setDayOfWeek(dayOfWeek == 1 ? 7 : dayOfWeek - 1);
-      
-        int weekOfYear = now.get(Calendar.WEEK_OF_YEAR);
-        model.setWeekOfYear(weekOfYear);
-        
-        //在当前时间基础上设置时间为当周第一天
-        now.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); // 获取本周一的日期
-        // 根据今天的时间获取本周的开始时间
-        now.set(Calendar.HOUR_OF_DAY, 0);
-        now.set(Calendar.MINUTE, 0);
-        now.set(Calendar.SECOND, 0);
-        now.set(Calendar.MILLISECOND, 0);
-//        System.out.println("********" + now.get(Calendar.YEAR) + "年"
-//                + ((now.get(Calendar.MONTH)) + 1) + "月第" + wom + "周星期一的日期是："
-//                + df.format(now.getTime()));
-        model.setStartDateOfWeek(now.getTime());
-
-        //now.setFirstDayOfWeek(Calendar.MONDAY);// 此处不能加，会严重干扰
-        // 根据今天的时间获取本周的结束时间
-        now.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        now.set(Calendar.HOUR_OF_DAY, 23);
-        now.set(Calendar.MINUTE, 59);
-        now.set(Calendar.SECOND, 59);
-        now.set(Calendar.MILLISECOND, 999);
-//        System.out.println("********" + now.get(Calendar.YEAR) + "年"
-//                + ((now.get(Calendar.MONTH)) + 1) + "月第" + wom + "周星期天的日期是："
-//                + df.format(now.getTime()));
-        model.setEndDateOfWeek(now.getTime());
-        
-        return model;
-    }
     
     /**
      * 获取时间段内的时间(正序)
